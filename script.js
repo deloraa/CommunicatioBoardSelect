@@ -54,18 +54,16 @@ const solutionOptions = {
     enableFaceGeometry: false,
     maxNumFaces: 1,
     refineLandmarks: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5,
     lookDelay: 300,
     lookWidthThreshold: 0.08,
     lookUpThreshold: 0.11,
-    lookDownThreshold: 0.05,
+    lookDownThreshold: 0.07,
     blinkCutoffTop: 5,
     blinkCutoffBottom: 4
 };
 // We'll add this to our control panel later, but we'll save it here so we can
 // call tick() each time the graph runs.
-const fpsControl = new controls.FPS();
+//const fpsControl = new controls.FPS();
 
 var imagelinks = ["images/amafraid.jpg", "images/amfeelingsick.jpg", "images/aminpain.jpg", "images/wanthobupdown.jpg", "images/wanttvvideo.jpg", "images/wanttobecomforted.jpg", "images/amangry.jpg", "images/amfrustrated.jpg", "images/amsad.jpg", "images/wantliedown.jpg", "images/wantquiet.jpg", "images/wanttobesucctioned.jpg", "images/amchoking.jpg", "images/amhotcold.jpg", "images/amshortofbreath.jpg", "images/wantlightsoffon.jpg", "images/wantremote.jpg", "images/wanttogohome.jpg", "images/amdizzy.jpg", "images/amhungrythirsty.jpg", "images/amtired.jpg", "images/wantwater.jpg", "images/wantsitup.jpg", "images/wanttosleep.jpg"];
 
@@ -211,7 +209,7 @@ var lowerBlinkCutoff = 4;
 function onResults(results) {
     var minThreshold = 0.5 - widthThreshold;
     var maxThreshold = 0.5 + widthThreshold;
-    fpsControl.tick();
+//    fpsControl.tick();
     loaderelement.style.display = 'none';
     loadingtext.style.display = 'none';
 
@@ -314,23 +312,10 @@ new controls
     .ControlPanel(controlsElement, solutionOptions)
     .add([
         new controls.StaticText({ title: 'Settings' }),
-        fpsControl,
         new controls.SourcePicker({
             onFrame: async(input, size) => {
                 await faceMesh.send({ image: input });
             },
-        }),
-        new controls.Slider({
-            title: 'Min Detection Confidence',
-            field: 'minDetectionConfidence',
-            range: [0, 1],
-            step: 0.01
-        }),
-        new controls.Slider({
-            title: 'Min Tracking Confidence',
-            field: 'minTrackingConfidence',
-            range: [0, 1],
-            step: 0.01
         }),
         new controls.Slider({
             title: 'Look Delay Threshold in milliseconds',
@@ -367,11 +352,8 @@ new controls
             field: 'blinkCutoffBottom',
             range: [2, 10],
             step: 0.1
-        }),
-    ])
-
-
-.on(x => {
+        })
+    ]).on(x => {
     const options = x;
     LOOK_DELAY = options.lookDelay;
     widthThreshold = options.lookWidthThreshold;
