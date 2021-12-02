@@ -57,14 +57,17 @@ const solutionOptions = {
     minDetectionConfidence: 0.5,
     minTrackingConfidence: 0.5,
     lookDelay: 300,
-    lookWidthThreshold: 0.08
+    lookWidthThreshold: 0.08,
+    lookUpThreshold: 0.11,
+    lookDownThreshold: 0.05,
+    blinkCutoffTop: 5,
+    blinkCutoffBottom: 4
 };
 // We'll add this to our control panel later, but we'll save it here so we can
 // call tick() each time the graph runs.
 const fpsControl = new controls.FPS();
 
 var imagelinks = ["images/amafraid.jpg", "images/amfeelingsick.jpg", "images/aminpain.jpg", "images/wanthobupdown.jpg", "images/wanttvvideo.jpg", "images/wanttobecomforted.jpg", "images/amangry.jpg", "images/amfrustrated.jpg", "images/amsad.jpg", "images/wantliedown.jpg", "images/wantquiet.jpg", "images/wanttobesucctioned.jpg", "images/amchoking.jpg", "images/amhotcold.jpg", "images/amshortofbreath.jpg", "images/wantlightsoffon.jpg", "images/wantremote.jpg", "images/wanttogohome.jpg", "images/amdizzy.jpg", "images/amhungrythirsty.jpg", "images/amtired.jpg", "images/wantwater.jpg", "images/wantsitup.jpg", "images/wanttosleep.jpg"];
-
 
 var imagesElements = [document.getElementById("img0"), document.getElementById("img1"), document.getElementById("img2"), document.getElementById("img3"), document.getElementById("img4"), document.getElementById("img5"), document.getElementById("img6"), document.getElementById("img7"), document.getElementById("img8"), document.getElementById("img9"), document.getElementById("img10"), document.getElementById("img11"), document.getElementById("img12"), document.getElementById("img13"), document.getElementById("img14"), document.getElementById("img15"), document.getElementById("img16"), document.getElementById("img17"), document.getElementById("img18"), document.getElementById("img19"), document.getElementById("img20"), document.getElementById("img21"), document.getElementById("img22"), document.getElementById("img23")];
 
@@ -146,8 +149,8 @@ var grid = new GridManager(4, 6);
 //between 0.00-0.5
 var widthThreshold = 0.08;
 var LOOK_DELAY = 300; // 0.5 second
-var upperThreshold = 0.11;
-var lowerThreshold = 0.05;
+var upperLookThreshold = 0.11;
+var lowerLookThreshold = 0.05;
 
 function leftRightUpDownRatio(landmarks) {
     var rhDistance = euclideanDistance(landmarks[0][RIGHT_EYE[0]].x, landmarks[0][RIGHT_EYE[0]].y, landmarks[0][RIGHT_EYE[8]].x, landmarks[0][RIGHT_EYE[8]].y);
@@ -200,13 +203,9 @@ var rightImages = imagelinks.slice(imagelinks.length / 2, imagelinks.length);
 var loaderelement = document.getElementById("loader");
 var loadingtext = document.getElementById("loadingtext");
 
-var iamelement = document.getElementById("iamtag");
-var iwantelement = document.getElementById("iwanttag");
-
-var depthOfSelection = 0;
 
 var blinkTime = 1000;
-var upperblinkCutoff = 5;
+var upperBlinkCutoff = 5;
 var lowerBlinkCutoff = 4;
 
 function onResults(results) {
@@ -224,8 +223,9 @@ function onResults(results) {
     var verticalLookRatio = 0;
     [horizontalLookRatio, verticalLookRatio] = leftRightUpDownRatio(results.multiFaceLandmarks);
     var [lBlinkRatio, rBlinkRatio] = blinkRatio(results.multiFaceLandmarks);
+    console.log(`lblinkratio ${lBlinkRatio} rblinkRatio ${rBlinkRatio}`);
     var selectElement = false;
-    if (lBlinkRatio > upperblinkCutoff && rBlinkRatio < lowerBlinkCutoff) {
+    if (lBlinkRatio > upperBlinkCutoff && rBlinkRatio < lowerBlinkCutoff) {
         selectElement = true
     } else {
         selectElement = false;
@@ -252,7 +252,7 @@ function onResults(results) {
         startLookTime = timestamp;
         lookDirection = "RIGHT";
     } else if (
-        verticalLookRatio > upperThreshold &&
+        verticalLookRatio > upperLookThreshold &&
         lookDirection !== "UP" &&
         lookDirection !== "LEFT" &&
         lookDirection !== "RIGHT" &&
@@ -260,18 +260,18 @@ function onResults(results) {
         startLookTime = timestamp;
         lookDirection = "UP";
     } else if (
-        verticalLookRatio < lowerThreshold &&
+        verticalLookRatio < lowerLookThreshold &&
         lookDirection !== "DOWN" &&
         lookDirection !== "LEFT" &&
         lookDirection !== "RIGHT" &&
         lookDirection !== "RESET") {
         startLookTime = timestamp;
         lookDirection = "DOWN";
-    } else if (horizontalLookRatio <= maxThreshold && horizontalLookRatio >= minThreshold && verticalLookRatio <= upperThreshold && verticalLookRatio >= lowerThreshold && !selectElement) {
+    } else if (horizontalLookRatio <= maxThreshold && horizontalLookRatio >= minThreshold && verticalLookRatio <= upperLookThreshold && verticalLookRatio >= lowerLookThreshold && !selectElement) {
         startLookTime = Number.POSITIVE_INFINITY;
         lookDirection = null;
     }
-    console.log("look direction: " + lookDirection);
+    //console.log("look direction: " + lookDirection);
     if (startLookTime + LOOK_DELAY < timestamp) {
         if (lookDirection === "SELECT") {
             modal.style.display = "block";
@@ -299,8 +299,6 @@ function onResults(results) {
             grid.down();
             imagesElements[grid.getIndex].style.border = "thick solid #0b5ed7";
         }
-
-
         lookDirection = "RESET";
     }
 
@@ -346,10 +344,40 @@ new controls
             range: [0.02, 0.3],
             step: 0.01
         }),
+        new controls.Slider({
+            title: 'Look Up Threshold',
+            field: 'lookUpThreshold',
+            range: [0.04, 0.3],
+            step: 0.01
+        }),
+        new controls.Slider({
+            title: 'Look Down Threshold',
+            field: 'lookDownThreshold',
+            range: [0.04, 0.3],
+            step: 0.01
+        }),
+        new controls.Slider({
+            title: 'Blink Closed Threshold',
+            field: 'blinkCutoffTop',
+            range: [2, 10],
+            step: 0.1
+        }),
+        new controls.Slider({
+            title: 'Blink Open Threshold',
+            field: 'blinkCutoffBottom',
+            range: [2, 10],
+            step: 0.1
+        }),
     ])
-    .on(x => {
-        const options = x;
-        LOOK_DELAY = options.lookDelay;
-        widthThreshold = options.lookWidthThreshold;
-        faceMesh.setOptions(options);
-    });
+
+
+.on(x => {
+    const options = x;
+    LOOK_DELAY = options.lookDelay;
+    widthThreshold = options.lookWidthThreshold;
+    upperBlinkCutoff = options.blinkCutoffTop;
+    lowerBlinkCutoff = options.blinkCutoffBottom;
+    upperLookThreshold = options.lookUpThreshold;
+    lowerLookThreshold = options.lookDownThreshold;
+    faceMesh.setOptions(options);
+});
