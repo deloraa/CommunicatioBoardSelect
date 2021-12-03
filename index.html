@@ -16,39 +16,48 @@
     <title>Communication Board</title>
 </head>
 <nav class="navbar navbar-light bg-light fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Eye See You</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Eye See You</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Settings</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-          <li class="nav-item">
-            <h6>Look up sensitivity</h6>
-            <input type="range" min="1" max="100" value="50">
-          </li>
-          <li class="nav-item">
-            <h6>Look down sensitivity</h6>
-            <input type="range" min="1" max="100" value="50">
-          </li>
-          <li class="nav-item">
-            <h6>Look left/right sensitivity</h6>
-            <input type="range" min="1" max="100" value="50">
-          </li>
-          <li class="nav-item">
-            <h6>Selection Time</h6>
-            <input type="range" min="1" max="100" value="50">
-          </li>
-        </ul>
-      </div>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Settings</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <h6>Look up sensitivity</h6>
+                        <input id="lookupsensslider" type="range" step="0.01" min="0.04" max="0.3" value="0.11"> <span id="lookupsens">0.11</span>
+                    </li>
+                    <li class="nav-item">
+                        <h6>Look down sensitivity</h6>
+                        <input id="lookdownsensslider" type="range" step="0.01" min="0.04" max="0.3" value="0.07"> <span id="lookdownsens">0.07</span>
+                    </li>
+                    <li class="nav-item">
+                        <h6>Look left/right sensitivity</h6>
+                        <input id="lookleftrightsensslider" type="range" step="0.01" min="0.02" max="0.3" value="0.08"> <span id="lookleftrightsens">0.08</span>
+                    </li>
+                    <li class="nav-item">
+                        <h6>Eye Closed sensitivity</h6>
+                        <input id="eyeclosedsensslider" type="range" step="0.1" min="2" max="10" value="5"> <span id="eyeclosedsens">5</span>
+                    </li>
+                    <li class="nav-item">
+                        <h6>Eye Open sensitivity</h6>
+                        <input id="eyeopensensslider" type="range" step="0.1" min="2" max="10" value="4"> <span id="eyeopensens">3.4</span>
+                    </li>
+                    <li class="nav-item">
+                        <h6>Time needed to activate selection</h6>
+                        <input id="timetoactivateslider" type="range" step="10" min="100" max="3000" value="300"> <span id="timetoactivate">300</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
 </nav>
+
 <body style="padding-top: 60px;">
     <div class="container" style="display: none">
         <video style="visibility: hidden" class="input_video"></video>
