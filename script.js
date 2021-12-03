@@ -1,3 +1,60 @@
+//between 0.00-0.5
+var widthThreshold = 0.08;
+var LOOK_DELAY = 300; // 0.5 second
+var upperLookThreshold = 0.11;
+var lowerLookThreshold = 0.05;
+
+var upperBlinkCutoff = 5;
+var lowerBlinkCutoff = 4;
+
+var lookupsensslider = document.getElementById("lookupsensslider");
+var lookupsens = document.getElementById("lookupsens");
+lookupsens.innerHTML = lookupsensslider.value; // Display the default slider value
+lookupsensslider.oninput = function() {
+    lookupsens.innerHTML = this.value;
+    upperLookThreshold = parseInt(this.value);
+}
+
+var lookdownsensslider = document.getElementById("lookdownsensslider");
+var lookdownsens = document.getElementById("lookdownsens");
+lookdownsens.innerHTML = lookdownsensslider.value; // Display the default slider value
+lookdownsensslider.oninput = function() {
+    lookdownsens.innerHTML = this.value;
+    lowerLookThreshold = parseInt(this.value);
+}
+
+var lookleftrightsensslider = document.getElementById("lookleftrightsensslider");
+var lookleftrightsens = document.getElementById("lookleftrightsens");
+lookleftrightsens.innerHTML = lookleftrightsensslider.value; // Display the default slider value
+lookleftrightsensslider.oninput = function() {
+    lookleftrightsens.innerHTML = this.value;
+    widthThreshold = parseInt(this.value);
+}
+
+var eyeclosedsensslider = document.getElementById("eyeclosedsensslider");
+var eyeclosedsens = document.getElementById("eyeclosedsens");
+eyeclosedsens.innerHTML = eyeclosedsensslider.value; // Display the default slider value
+eyeclosedsensslider.oninput = function() {
+    eyeclosedsens.innerHTML = this.value;
+    upperBlinkCutoff = parseInt(this.value);
+}
+
+var eyeopensensslider = document.getElementById("eyeopensensslider");
+var eyeopensens = document.getElementById("eyeopensens");
+eyeopensens.innerHTML = eyeopensensslider.value; // Display the default slider value
+eyeopensensslider.oninput = function() {
+    eyeopensens.innerHTML = this.value;
+    lowerBlinkCutoff = parseInt(this.value);
+}
+
+var timetoactivateslider = document.getElementById("timetoactivateslider");
+var timetoactivate = document.getElementById("timetoactivate");
+timetoactivate.innerHTML = timetoactivateslider.value; // Display the default slider value
+timetoactivateslider.oninput = function() {
+    timetoactivate.innerHTML = this.value;
+    LOOK_DELAY = parseInt(this.value);
+}
+
 import DeviceDetector from "https://cdn.skypack.dev/device-detector-js@2.2.10";
 // Usage: testSupport({client?: string, os?: string}[])
 // Client and os are regular expressions.
@@ -54,12 +111,6 @@ const solutionOptions = {
     enableFaceGeometry: false,
     maxNumFaces: 1,
     refineLandmarks: true,
-    lookDelay: 300,
-    lookWidthThreshold: 0.08,
-    lookUpThreshold: 0.11,
-    lookDownThreshold: 0.07,
-    blinkCutoffTop: 5,
-    blinkCutoffBottom: 4
 };
 // We'll add this to our control panel later, but we'll save it here so we can
 // call tick() each time the graph runs.
@@ -69,18 +120,6 @@ var imagelinks = ["images/amafraid.jpg", "images/amfeelingsick.jpg", "images/ami
 
 var imagesElements = [document.getElementById("img0"), document.getElementById("img1"), document.getElementById("img2"), document.getElementById("img3"), document.getElementById("img4"), document.getElementById("img5"), document.getElementById("img6"), document.getElementById("img7"), document.getElementById("img8"), document.getElementById("img9"), document.getElementById("img10"), document.getElementById("img11"), document.getElementById("img12"), document.getElementById("img13"), document.getElementById("img14"), document.getElementById("img15"), document.getElementById("img16"), document.getElementById("img17"), document.getElementById("img18"), document.getElementById("img19"), document.getElementById("img20"), document.getElementById("img21"), document.getElementById("img22"), document.getElementById("img23")];
 
-function resetImages() {
-    leftImages = imagelinks.slice(0, Math.ceil(imagelinks.length / 2));
-    rightImages = imagelinks.slice(Math.ceil(imagelinks.length / 2), imagelinks.length);
-    for (let i = 0; i < leftImages.length; i++) {
-        imagesswapL[i].src = leftImages[i];
-        imagesswapL[i].style.visibility = "visible";
-    }
-    for (let i = 0; i < rightImages.length; i++) {
-        imagesswapR[i].src = rightImages[i];
-        imagesswapR[i].style.visibility = "visible";
-    }
-}
 
 const LEFT_IRIS = [474, 475, 476, 477];
 const LEFT_EYE = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385, 384, 398];
@@ -144,11 +183,7 @@ class GridManager {
 
 var grid = new GridManager(4, 6);
 
-//between 0.00-0.5
-var widthThreshold = 0.08;
-var LOOK_DELAY = 300; // 0.5 second
-var upperLookThreshold = 0.11;
-var lowerLookThreshold = 0.05;
+
 
 function leftRightUpDownRatio(landmarks) {
     var rhDistance = euclideanDistance(landmarks[0][RIGHT_EYE[0]].x, landmarks[0][RIGHT_EYE[0]].y, landmarks[0][RIGHT_EYE[8]].x, landmarks[0][RIGHT_EYE[8]].y);
@@ -202,14 +237,10 @@ var loaderelement = document.getElementById("loader");
 var loadingtext = document.getElementById("loadingtext");
 
 
-var blinkTime = 1000;
-var upperBlinkCutoff = 5;
-var lowerBlinkCutoff = 4;
-
 function onResults(results) {
     var minThreshold = 0.5 - widthThreshold;
     var maxThreshold = 0.5 + widthThreshold;
-//    fpsControl.tick();
+    //    fpsControl.tick();
     loaderelement.style.display = 'none';
     loadingtext.style.display = 'none';
 
@@ -272,6 +303,10 @@ function onResults(results) {
     //console.log("look direction: " + lookDirection);
     if (startLookTime + LOOK_DELAY < timestamp) {
         if (lookDirection === "SELECT") {
+            if (grid.getIndex == 15) {
+                //turn on bluetooth light
+
+            }
             modal.style.display = "block";
             modalImg.src = imagelinks[grid.getIndex];
             //pause for 4000 ms on selection
@@ -317,49 +352,7 @@ new controls
                 await faceMesh.send({ image: input });
             },
         }),
-        new controls.Slider({
-            title: 'Look Delay Threshold in milliseconds',
-            field: 'lookDelay',
-            range: [200, 3000],
-            step: 100
-        }),
-        new controls.Slider({
-            title: 'Look Width Threshold',
-            field: 'lookWidthThreshold',
-            range: [0.02, 0.3],
-            step: 0.01
-        }),
-        new controls.Slider({
-            title: 'Look Up Threshold',
-            field: 'lookUpThreshold',
-            range: [0.04, 0.3],
-            step: 0.01
-        }),
-        new controls.Slider({
-            title: 'Look Down Threshold',
-            field: 'lookDownThreshold',
-            range: [0.04, 0.3],
-            step: 0.01
-        }),
-        new controls.Slider({
-            title: 'Blink Closed Threshold',
-            field: 'blinkCutoffTop',
-            range: [2, 10],
-            step: 0.1
-        }),
-        new controls.Slider({
-            title: 'Blink Open Threshold',
-            field: 'blinkCutoffBottom',
-            range: [2, 10],
-            step: 0.1
-        })
     ]).on(x => {
-    const options = x;
-    LOOK_DELAY = options.lookDelay;
-    widthThreshold = options.lookWidthThreshold;
-    upperBlinkCutoff = options.blinkCutoffTop;
-    lowerBlinkCutoff = options.blinkCutoffBottom;
-    upperLookThreshold = options.lookUpThreshold;
-    lowerLookThreshold = options.lookDownThreshold;
-    faceMesh.setOptions(options);
-});
+        const options = x;
+        faceMesh.setOptions(options);
+    });
