@@ -221,7 +221,7 @@ function onResults(results) {
     var verticalLookRatio = 0;
     [horizontalLookRatio, verticalLookRatio] = leftRightUpDownRatio(results.multiFaceLandmarks);
     var [lBlinkRatio, rBlinkRatio] = blinkRatio(results.multiFaceLandmarks);
-    console.log(`lblinkratio ${lBlinkRatio} rblinkRatio ${rBlinkRatio}`);
+    //console.log(`lblinkratio ${lBlinkRatio} rblinkRatio ${rBlinkRatio}`);
     var selectElement = false;
     if (lBlinkRatio > upperBlinkCutoff && rBlinkRatio < lowerBlinkCutoff) {
         selectElement = true

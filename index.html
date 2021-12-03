@@ -15,8 +15,41 @@
 
     <title>Communication Board</title>
 </head>
-
-<body>
+<nav class="navbar navbar-light bg-light fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Eye See You</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Settings</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <h6>Look up sensitivity</h6>
+            <input type="range" min="1" max="100" value="50">
+          </li>
+          <li class="nav-item">
+            <h6>Look down sensitivity</h6>
+            <input type="range" min="1" max="100" value="50">
+          </li>
+          <li class="nav-item">
+            <h6>Look left/right sensitivity</h6>
+            <input type="range" min="1" max="100" value="50">
+          </li>
+          <li class="nav-item">
+            <h6>Selection Time</h6>
+            <input type="range" min="1" max="100" value="50">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<body style="padding-top: 60px;">
     <div class="container" style="display: none">
         <video style="visibility: hidden" class="input_video"></video>
         <canvas class="output_canvas" width="1280px" height="720px">
@@ -24,9 +57,9 @@
 
   <h6 id="loadingtext" style="Text-align: center">Loading...</h6>
   <div id="loader" class="loader"></div>
-  <div class="container-fluid" style="max-width:190vh;">
+  <div class="container-fluid" style="max-width:180vh; margin-left:auto, 8%">
     <div class="row">
-      <div class="col-sm-5 border border-secondary">
+      <div class="col-sm-5 border border-secondary" style="margin-left:auto">
         <div class="row">
           <h1 id="iamtag" style="Text-align: center">I am...</h1>
           <div class="col">
@@ -50,7 +83,7 @@
         </div>
       </div>
 
-      <div class="col-sm-5 border border-start-0 border-secondary">
+      <div class="col-sm-5 border border-start-0 border-secondary" style="margin-right:auto">
         <div class="row">
           <h1 id="iwanttag" style="Text-align: center">I want...</h1>
 
@@ -176,7 +209,7 @@
 
   </script>
 
-  <div class="control-panel" style="position: relative; top: 90%; left: 40%">
+  <div class="control-panel" style="position: relative; top: 90%; left: 40%; display: none">
   </div>
   <script type="module" src="script.js" defer></script>
 </body>
