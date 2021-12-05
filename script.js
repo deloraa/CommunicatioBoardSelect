@@ -9,10 +9,11 @@ var lowerBlinkCutoff = 4;
 
 var lookupsensslider = document.getElementById("lookupsensslider");
 var lookupsens = document.getElementById("lookupsens");
-lookupsens.innerHTML = lookupsensslider.value; // Display the default slider value
+//lookupsens.innerHTML = lookupsensslider.value; // Display the default slider value
 lookupsensslider.oninput = function() {
     lookupsens.innerHTML = this.value;
-    upperLookThreshold = parseInt(this.value);
+    upperLookThreshold = parseFloat(this.value);
+    console.log(`upperlookthresh`)
 }
 
 var lookdownsensslider = document.getElementById("lookdownsensslider");
@@ -20,7 +21,7 @@ var lookdownsens = document.getElementById("lookdownsens");
 lookdownsens.innerHTML = lookdownsensslider.value; // Display the default slider value
 lookdownsensslider.oninput = function() {
     lookdownsens.innerHTML = this.value;
-    lowerLookThreshold = parseInt(this.value);
+    lowerLookThreshold = parseFloat(this.value);
 }
 
 var lookleftrightsensslider = document.getElementById("lookleftrightsensslider");
@@ -28,7 +29,7 @@ var lookleftrightsens = document.getElementById("lookleftrightsens");
 lookleftrightsens.innerHTML = lookleftrightsensslider.value; // Display the default slider value
 lookleftrightsensslider.oninput = function() {
     lookleftrightsens.innerHTML = this.value;
-    widthThreshold = parseInt(this.value);
+    widthThreshold = parseFloat(this.value);
 }
 
 var eyeclosedsensslider = document.getElementById("eyeclosedsensslider");
@@ -36,7 +37,7 @@ var eyeclosedsens = document.getElementById("eyeclosedsens");
 eyeclosedsens.innerHTML = eyeclosedsensslider.value; // Display the default slider value
 eyeclosedsensslider.oninput = function() {
     eyeclosedsens.innerHTML = this.value;
-    upperBlinkCutoff = parseInt(this.value);
+    upperBlinkCutoff = parseFloat(this.value);
 }
 
 var eyeopensensslider = document.getElementById("eyeopensensslider");
@@ -44,7 +45,7 @@ var eyeopensens = document.getElementById("eyeopensens");
 eyeopensens.innerHTML = eyeopensensslider.value; // Display the default slider value
 eyeopensensslider.oninput = function() {
     eyeopensens.innerHTML = this.value;
-    lowerBlinkCutoff = parseInt(this.value);
+    lowerBlinkCutoff = parseFloat(this.value);
 }
 
 var timetoactivateslider = document.getElementById("timetoactivateslider");
